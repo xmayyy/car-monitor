@@ -22,7 +22,7 @@ axios.interceptors.request.use((config) => {
 }, (error) => {
     return Promise.reject(error)
 })
-
+axios.defaults.withCredentials = true;
 // axios的get请求
 export function getAxios({
     url,

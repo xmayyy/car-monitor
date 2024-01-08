@@ -3,16 +3,18 @@
 import styles from '../page.module.css';
 import loginCSS from './login.module.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input,Flex } from 'antd';
+import { Button, Checkbox, Form, Input,Flex,message } from 'antd';
 import { useRouter } from 'next/navigation';
 import { register } from '../api/user';
 export default function Register() {
+	const [messageApi, contextHolder] = message.useMessage();
 	const router = useRouter();
 	const onFinish = async (values: any) => {
 		console.log('Received values of form: ', values);
 		const res = await register(values)
-		console.log('res',res)
-		// router.push('/login');
+			messageApi.info('注册成功');
+			console.log('res',res)
+		router.push('/login');
 	};
 	return (
 		<div className={loginCSS.main}>

@@ -5,9 +5,9 @@ export default function Home() {
   const router = useRouter()
 	const options = [
 		{
-			name: '登陆',
+			name: '开始使用',
 			dsc: 'Get started with the system',
-			path: '/login',
+			path: '/home',
 		},
 		{
 			name: '简介',

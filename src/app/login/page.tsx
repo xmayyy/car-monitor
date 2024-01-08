@@ -3,23 +3,28 @@
 import styles from '../page.module.css';
 import loginCSS from './login.module.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input,Flex } from 'antd';
+import { Button, Checkbox, Form, Input, Flex,message } from 'antd';
 import { useRouter } from 'next/navigation';
-
+import { login } from '../api/user';
 export default function Login() {
 	const router = useRouter();
-	const onFinish = (values: any) => {
-		console.log('Received values of form: ', values);
-		setTimeout(() => {
-			console.log('登录')
-		}, 500);
+	const [messageApi, contextHolder] = message.useMessage();
+	const onFinish = async (values: any) => {
+		const res = await login(values);
+		if(res.token){
+			messageApi.info('登录成功');
+		  router.push('/home');
+		}else{
+			messageApi.error(res.message);
+		}
 	};
-	const onRegister = (e:any) =>{
-		e.preventDefault()
-		router.push('/register')
-	}
+	const onRegister = (e: any) => {
+		e.preventDefault();
+		router.push('/register');
+	};
 	return (
 		<div className={loginCSS.main}>
+			{contextHolder}
 			<div className={loginCSS.card}>
 				<h1 className={styles.center}>登录</h1>
 				<Form
@@ -58,7 +63,7 @@ export default function Login() {
 					</Form.Item> */}
 
 					<Form.Item>
-						<Flex justify='space-between'>
+						<Flex justify="space-between">
 							<Button
 								type="primary"
 								htmlType="submit"
@@ -66,7 +71,7 @@ export default function Login() {
 							>
 								Log in
 							</Button>
-							<div>Or</div> <a onClick={(e)=>onRegister(e)}>register now!</a>
+							<div>Or</div> <a onClick={(e) => onRegister(e)}>register now!</a>
 						</Flex>
 					</Form.Item>
 				</Form>

@@ -7,7 +7,6 @@ export const register = (data) => {
 	return postAxios({ url: registerUrl, data });
 };
 export const login = (data) => {
-	console.log('loginUrl', loginUrl);
 	return postAxios({ url: loginUrl, data });
 };
 export const checkLogin = () => {

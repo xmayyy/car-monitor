@@ -3,7 +3,7 @@
 import styles from '../page.module.css';
 import loginCSS from './login.module.css';
 import { LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, Flex,message } from 'antd';
+import { Button, Checkbox, Form, Input, Flex, message } from 'antd';
 import { useRouter } from 'next/navigation';
 import { login } from '../api/user';
 export default function Login() {
@@ -11,10 +11,10 @@ export default function Login() {
 	const [messageApi, contextHolder] = message.useMessage();
 	const onFinish = async (values: any) => {
 		const res = await login(values);
-		if(res.token){
+		if (res.token) {
 			messageApi.info('登录成功');
-		  router.push('/home');
-		}else{
+			router.push('/home');
+		} else {
 			messageApi.error(res.message);
 		}
 	};

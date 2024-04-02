@@ -1,0 +1,58 @@
+.imgDiv {
+	position: relative;
+	height: 30rem;
+}
+.img {
+	position: relative;
+	/* height: 7rem; */
+}
+.card {
+	position: absolute;
+	box-sizing: border-box;
+	width: 30rem;
+	height: 40rem;
+	border: 5px solid #ffc107;
+	background-color: transparent;
+}
+.main {
+	min-height: 30rem;
+}
+.content {
+	/* background-color: green; */
+	display: flex;
+	height: 30rem;
+}
+.left {
+	flex: 0 1 300px;
+	/* background-color: yellow; */
+	height: 100%;
+	margin-right: 1rem;
+}
+.right {
+	height: 100%;
+	flex: 1;
+}
+.head {
+	display: flex;
+	justify-content: space-between;
+}
+.groupContent {
+	min-height: 3rem;
+	display: flex;
+	justify-content: space-between;
+	line-height: 3rem;
+	border-top: 1px solid #ccc;
+	text-align: center;
+	cursor: pointer;
+}
+.groupName {
+	font-size: 15px;
+	font-weight: 400;
+}
+.groupContent:hover {
+	background-color: #f9f9f9;
+}
+.light {
+	color: skyblue;
+	font-size: 800;
+}

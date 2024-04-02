@@ -1,6 +1,5 @@
 'use client';
 import { ReactNode, useEffect, useState } from 'react';
-import { Button } from 'antd';
 import styles from '../page.module.css';
 import homeCSS from './home.module.css';
 import {
@@ -11,7 +10,7 @@ import {
 	UserOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Breadcrumb, Layout, Menu, theme, message, Flex } from 'antd';
+import { App ,Breadcrumb, Layout, Menu, theme, message, Flex } from 'antd';
 import { useRouter } from 'next/navigation';
 import cookie from 'js-cookie';
 // api
@@ -38,11 +37,7 @@ function getItem(
 const items: MenuItem[] = [
 	getItem('图片上传', '/upload', <FileOutlined />),
 	getItem('分析数据', '/analytics', <DesktopOutlined />),
-	getItem('User', 'sub1', <UserOutlined />, [
-		getItem('Tom', '3'),
-		getItem('Bill', '4'),
-		getItem('Alex', '5'),
-	]),
+	getItem('人员管理', '/manage', <UserOutlined />),
 	getItem('Team', 'sub2', <TeamOutlined />, [
 		getItem('Team 1', '6'),
 		getItem('Team 2', '8'),
@@ -50,9 +45,10 @@ const items: MenuItem[] = [
 	getItem('Files', '9', <PieChartOutlined />),
 ];
 interface MyComponentProps {
-  children: ReactNode;
+	children: ReactNode;
 }
-export default function Home({ children }:MyComponentProps) {
+
+export default function Home({ children }: MyComponentProps) {
 	const router = useRouter();
 	const [messageApi, contextHolder] = message.useMessage();
 	const [username, setUsername] = useState('');
@@ -66,8 +62,8 @@ export default function Home({ children }:MyComponentProps) {
 
 	// 选中导航菜单
 	const clickMenu = function (e: any) {
-			console.log('item', e);
-			router.push('/home'+e.key);
+		console.log('item', e);
+		router.push('/home' + e.key);
 	};
 	// 检查登录状态
 	async function checkLoginFirst() {
@@ -95,7 +91,8 @@ export default function Home({ children }:MyComponentProps) {
 		router.push('/login');
 	};
 	return (
-		<div className={homeCSS.main}>
+		<App>
+			<div className={homeCSS.main}>
 			{contextHolder}
 			<Layout style={{ minHeight: '100vh' }}>
 				<Sider
@@ -116,7 +113,7 @@ export default function Home({ children }:MyComponentProps) {
 				<Layout>
 					<Header style={{ padding: 0, background: colorBgContainer }}>
 						<Flex justify="space-between">
-							<h1 className={homeCSS.title}>饕餮监控系统</h1>
+							<h1 className={homeCSS.title}>驾驶行为监控系统</h1>
 							{username ? (
 								<Flex>
 									<span className={homeCSS.user}>{username}</span>
@@ -142,11 +139,10 @@ export default function Home({ children }:MyComponentProps) {
 							{children}
 						</div>
 					</Content>
-					<Footer style={{ textAlign: 'center' }}>
-						Ant Design ©2023 Created by Ant UED
-					</Footer>
+					<Footer style={{ textAlign: 'center' }}></Footer>
 				</Layout>
 			</Layout>
 		</div>
+		</App>
 	);
 }

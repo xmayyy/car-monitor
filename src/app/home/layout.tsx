@@ -10,7 +10,7 @@ import {
 	UserOutlined,
 } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { App ,Breadcrumb, Layout, Menu, theme, message, Flex } from 'antd';
+import { App, Breadcrumb, Layout, Menu, theme, message, Flex } from 'antd';
 import { useRouter } from 'next/navigation';
 import cookie from 'js-cookie';
 // api
@@ -37,12 +37,8 @@ function getItem(
 const items: MenuItem[] = [
 	getItem('图片上传', '/upload', <FileOutlined />),
 	getItem('分析数据', '/analytics', <DesktopOutlined />),
-	getItem('人员管理', '/manage', <UserOutlined />),
-	getItem('Team', 'sub2', <TeamOutlined />, [
-		getItem('Team 1', '6'),
-		getItem('Team 2', '8'),
-	]),
-	getItem('Files', '9', <PieChartOutlined />),
+	getItem('人员管理', '/manage', <TeamOutlined />),
+	getItem('个人中心', '/sub', <UserOutlined />),
 ];
 interface MyComponentProps {
 	children: ReactNode;
@@ -93,56 +89,56 @@ export default function Home({ children }: MyComponentProps) {
 	return (
 		<App>
 			<div className={homeCSS.main}>
-			{contextHolder}
-			<Layout style={{ minHeight: '100vh' }}>
-				<Sider
-					theme="light"
-					collapsible
-					collapsed={collapsed}
-					onCollapse={(value) => setCollapsed(value)}
-				>
-					{/* <div className="demo-logo-vertical" /> */}
-					<Menu
+				{contextHolder}
+				<Layout style={{ minHeight: '100vh' }}>
+					<Sider
 						theme="light"
-						defaultSelectedKeys={['1']}
-						mode="inline"
-						items={items}
-						onClick={(e) => clickMenu(e)}
-					/>
-				</Sider>
-				<Layout>
-					<Header style={{ padding: 0, background: colorBgContainer }}>
-						<Flex justify="space-between">
-							<h1 className={homeCSS.title}>驾驶行为监控系统</h1>
-							{username ? (
-								<Flex>
-									<span className={homeCSS.user}>{username}</span>
-									<span className={homeCSS.logout} onClick={logout}>
-										退出登录
-									</span>
-								</Flex>
-							) : null}
-						</Flex>
-					</Header>
-					<Content style={{ margin: '0 16px' }}>
-						<Breadcrumb
-							style={{ margin: '16px 0' }}
-							items={[{ title: '首页' }, { title: '' }]}
-						></Breadcrumb>
-						<div
-							style={{
-								padding: 24,
-								minHeight: 480,
-								background: colorBgContainer,
-							}}
-						>
-							{children}
-						</div>
-					</Content>
-					<Footer style={{ textAlign: 'center' }}></Footer>
+						collapsible
+						collapsed={collapsed}
+						onCollapse={(value) => setCollapsed(value)}
+					>
+						{/* <div className="demo-logo-vertical" /> */}
+						<Menu
+							theme="light"
+							defaultSelectedKeys={['1']}
+							mode="inline"
+							items={items}
+							onClick={(e) => clickMenu(e)}
+						/>
+					</Sider>
+					<Layout>
+						<Header style={{ padding: 0, background: colorBgContainer }}>
+							<Flex justify="space-between">
+								<h1 className={homeCSS.title}>驾驶行为监控系统</h1>
+								{username ? (
+									<Flex>
+										<span className={homeCSS.user}>{username}</span>
+										<span className={homeCSS.logout} onClick={logout}>
+											退出登录
+										</span>
+									</Flex>
+								) : null}
+							</Flex>
+						</Header>
+						<Content style={{ margin: '0 16px' }}>
+							<Breadcrumb
+								style={{ margin: '16px 0' }}
+								items={[{ title: '首页' }, { title: '' }]}
+							></Breadcrumb>
+							<div
+								style={{
+									padding: 24,
+									minHeight: 480,
+									background: colorBgContainer,
+								}}
+							>
+								{children}
+							</div>
+						</Content>
+						<Footer style={{ textAlign: 'center' }}></Footer>
+					</Layout>
 				</Layout>
-			</Layout>
-		</div>
+			</div>
 		</App>
 	);
 }

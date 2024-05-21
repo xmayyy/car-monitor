@@ -44,6 +44,10 @@ export default function Analytics() {
 			title: '记录id',
 			dataIndex: 'log_id',
 		},
+		{
+			title: '姓名',
+			dataIndex: 'name',
+		},
 		// {
 		// 	title: '检测人数',
 		// 	dataIndex: 'person_num',
@@ -129,6 +133,7 @@ export default function Analytics() {
 		if(!item.person_info)return{key:item.log_id}
 		console.log('item', item);
 		return {
+			name:item.name,
 			key: item.log_id,
 			person_num: item.person_num,
 			log_id: item.log_id,

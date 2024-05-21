@@ -1,10 +1,10 @@
 import { getAxios, postAxios } from '@/utils/axios';
-const getListUrl = '/people/addPeople';
+const addPeopleUrl = '/people/addPeople';
 const deletePeopleUrl = '/people/deletePeople';
 const updatePeopleUrl = '/people/updatePeople';
 const getPeopleListUrl = '/people/getPeopleList';
 export const addPeople = (data) => {
-	return postAxios({ url: getListUrl, data });
+	return postAxios({ url: addPeopleUrl, data });
 };
 export const deletePeople = (data) => {
 	return postAxios({ url: deletePeopleUrl, data });

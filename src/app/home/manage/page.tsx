@@ -1,15 +1,18 @@
 'use client';
-import { use, useEffect, useState } from 'react';
-import { Button } from 'antd';
+import React, { use, useEffect, useState, useRef } from 'react';
 import styles from '../page.module.css';
 import manageCSS from './manage.module.css';
-import { InboxOutlined } from '@ant-design/icons';
+import { InboxOutlined, SearchOutlined } from '@ant-design/icons';
 import type { UploadProps } from 'antd';
 import { useRouter } from 'next/navigation';
 import cookie from 'js-cookie';
 import { devNull } from 'os';
-import React from 'react';
+import {} from '@ant-design/icons';
+import type { GetRef, TableColumnsType, TableColumnType } from 'antd';
+import type { FilterDropdownProps } from 'antd/es/table/interface';
+import Highlighter from 'react-highlight-words';
 import {
+	Button,
 	App,
 	Table,
 	Space,
@@ -57,6 +60,7 @@ type Group = {
 	group_dec: string;
 	id: any;
 };
+type InputRef = GetRef<typeof Input>;
 interface PeopleDataType {
 	name: string;
 	people_id: number;
@@ -82,12 +86,122 @@ const peopleData: PeopleDataType[] = [
 		sex: '男',
 	},
 ];
+type DataIndex = keyof PeopleDataType;
 export default function Analytics() {
+	const [searchText, setSearchText] = useState('');
+	const [searchedColumn, setSearchedColumn] = useState('');
+	const searchInput = useRef<InputRef>(null);
+
+	const handleSearch = (
+		selectedKeys: string[],
+		confirm: FilterDropdownProps['confirm'],
+		dataIndex: DataIndex
+	) => {
+		confirm();
+		setSearchText(selectedKeys[0]);
+		setSearchedColumn(dataIndex);
+	};
+
+	const handleReset = (clearFilters: () => void) => {
+		clearFilters();
+		setSearchText('');
+	};
+	const getColumnSearchProps = (
+		dataIndex: DataIndex
+	): TableColumnType<PeopleDataType> => ({
+		filterDropdown: ({
+			setSelectedKeys,
+			selectedKeys,
+			confirm,
+			clearFilters,
+			close,
+		}) => (
+			<div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
+				<Input
+					ref={searchInput}
+					placeholder={`Search ${dataIndex}`}
+					value={selectedKeys[0]}
+					onChange={(e) =>
+						setSelectedKeys(e.target.value ? [e.target.value] : [])
+					}
+					onPressEnter={() =>
+						handleSearch(selectedKeys as string[], confirm, dataIndex)
+					}
+					style={{ marginBottom: 8, display: 'block' }}
+				/>
+				<Space>
+					<Button
+						type="primary"
+						onClick={() =>
+							handleSearch(selectedKeys as string[], confirm, dataIndex)
+						}
+						icon={<SearchOutlined />}
+						size="small"
+						style={{ width: 90 }}
+					>
+						搜索
+					</Button>
+					<Button
+						onClick={() => clearFilters && handleReset(clearFilters)}
+						size="small"
+						style={{ width: 90 }}
+					>
+						重置
+					</Button>
+					<Button
+						type="link"
+						size="small"
+						onClick={() => {
+							confirm({ closeDropdown: false });
+							setSearchText((selectedKeys as string[])[0]);
+							setSearchedColumn(dataIndex);
+						}}
+					>
+						筛选
+					</Button>
+					<Button
+						type="link"
+						size="small"
+						onClick={() => {
+							close();
+						}}
+					>
+						关闭
+					</Button>
+				</Space>
+			</div>
+		),
+		filterIcon: (filtered: boolean) => (
+			<SearchOutlined style={{ color: filtered ? '#1677ff' : undefined }} />
+		),
+		onFilter: (value, record: any) =>
+			record[dataIndex]
+				.toString()
+				.toLowerCase()
+				.includes((value as string).toLowerCase()),
+		onFilterDropdownOpenChange: (visible) => {
+			if (visible) {
+				setTimeout(() => searchInput.current?.select(), 100);
+			}
+		},
+		render: (text) =>
+			searchedColumn === dataIndex ? (
+				<Highlighter
+					highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+					searchWords={[searchText]}
+					autoEscape
+					textToHighlight={text ? text.toString() : ''}
+				/>
+			) : (
+				text
+			),
+	});
 	const columns: TableProps<PeopleDataType>['columns'] = [
 		{
 			title: '姓名',
 			dataIndex: 'name',
 			key: 'name',
+			...getColumnSearchProps('name'),
 		},
 		{
 			title: '出生年月',
@@ -105,7 +219,7 @@ export default function Analytics() {
 			dataIndex: 'sex',
 		},
 		{
-			title: 'Action',
+			title: '操作',
 			key: 'people_id',
 			render: (_, record) => (
 				<Space size="middle">
@@ -173,6 +287,7 @@ export default function Analytics() {
 		} else {
 			// 添加
 			const res = await addGroup(data);
+			getList();
 			console.log('addGroup', res);
 		}
 		setIsAddGroupModalOpen(false);
@@ -191,7 +306,7 @@ export default function Analytics() {
 
 	async function getList() {
 		const res = await getGroupList({ id: cookie.get('USER_ID') });
-		setNowGroupId(res.data[0].group_id);
+		setNowGroupId(res.data[0].group_id || 0);
 		console.log('res', res);
 		setGroupList(res.data);
 		getPeoples({ group_id: nowGroupId });
